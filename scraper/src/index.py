@@ -4,19 +4,19 @@ DocSearch scraper main entry point
 import os
 import json
 import requests
+import tempfile
 from requests_iap import IAPAuth
 from keycloak.realm import KeycloakRealm
 
 from scrapy.crawler import CrawlerProcess
 
-from .typesense_helper import TypesenseHelper
-from .config.config_loader import ConfigLoader
-from .documentation_spider import DocumentationSpider
-from .strategies.default_strategy import DefaultStrategy
-from .custom_downloader_middleware import CustomDownloaderMiddleware
-from .custom_dupefilter import CustomDupeFilter
-from .config.browser_handler import BrowserHandler
-from .strategies.algolia_settings import AlgoliaSettings
+from typesense_helper import TypesenseHelper
+from config.config_loader import ConfigLoader
+from documentation_spider import DocumentationSpider
+from strategies.default_strategy import DefaultStrategy
+from custom_downloader_middleware import CustomDownloaderMiddleware
+from custom_dupefilter import CustomDupeFilter
+from config.browser_handler import BrowserHandler
 
 try:
     # disable boto (S3 download)
@@ -42,9 +42,9 @@ def run_config(config):
         config.index_name_tmp,
         config.custom_settings
     )
-    typesense_helper.create_tmp_collection()
+    # typesense_helper.create_tmp_collection()
 
-    root_module = 'src.' if __name__ == '__main__' else 'scraper.src.'
+    root_module = 'scraper.src.' if __name__ == '__main__' else 'scraper.src.'
     DOWNLOADER_MIDDLEWARES_PATH = root_module + 'custom_downloader_middleware.' + CustomDownloaderMiddleware.__name__
     DUPEFILTER_CLASS_PATH = root_module + 'custom_dupefilter.' + CustomDupeFilter.__name__
 
@@ -135,4 +135,56 @@ def run_config(config):
 if __name__ == '__main__':
     from os import environ
 
-    run_config(environ['CONFIG'])
+    config = {
+            "index_name": "curling",
+            "start_urls": [
+                "https://curling.io/docs/"
+            ],
+            "sitemap_urls": [
+                "https://curling.io/sitemap.xml"
+            ],
+            "sitemap_alternate_links": True,
+            "stop_urls": [],
+            "selectors": {
+                "lvl0": {
+                    "selector": ".menu__link--sublist.menu__link--active",
+                    "global": True,
+                    "default_value": "Documentation"
+                },
+                "lvl1": "header h1",
+                "lvl2": "article h2",
+                "lvl3": "article h3",
+                "lvl4": "article h4",
+                "lvl5": "article h5, article td:first-child",
+                "text": "article p, article li, article td:last-child"
+            },
+            "strip_chars": " .,;:#",
+            "custom_settings": {
+                "separatorsToIndex": "_",
+                "attributesForFaceting": [
+                    "language",
+                    "version",
+                    "type"
+                ],
+                "attributesToRetrieve": [
+                    "hierarchy",
+                    "content",
+                    "anchor",
+                    "url",
+                    "url_without_anchor",
+                    "type"
+                ]
+            },
+            "conversation_id": [
+                "1325495026"
+            ],
+            "nb_hits": 698
+        }
+
+    with tempfile.NamedTemporaryFile(mode="w", delete=False) as temp_file:
+        json.dump(config, temp_file, indent=4)
+
+    with open(temp_file.name, "w") as json_file:
+        json.dump(config, json_file, indent=4)  # Optional: Use 'indent' for pretty formatting
+
+    run_config(temp_file.name)

@@ -6,8 +6,8 @@ from lxml.etree import XPath
 from .abstract_strategy import AbstractStrategy
 from .anchor import Anchor
 from .hierarchy import Hierarchy
-from ..config.urls_parser import UrlsParser
-from ..helpers import to_json
+from config.urls_parser import UrlsParser
+from helpers import to_json
 import json
 import hashlib
 

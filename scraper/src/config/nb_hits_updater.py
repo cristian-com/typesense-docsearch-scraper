@@ -1,4 +1,4 @@
-from ..helpers import confirm
+from helpers import confirm
 import json
 import copy
 import sys

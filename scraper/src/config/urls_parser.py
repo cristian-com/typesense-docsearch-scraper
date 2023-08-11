@@ -2,7 +2,7 @@ import re
 import copy
 
 from urllib.parse import urlparse
-from ..js_executor import JsExecutor
+from js_executor import JsExecutor
 
 
 class UrlsParser:

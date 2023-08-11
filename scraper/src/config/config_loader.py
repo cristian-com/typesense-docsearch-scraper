@@ -12,11 +12,11 @@ import os
 import copy
 from datetime import datetime
 
-from .config_validator import ConfigValidator
-from .nb_hits_updater import NbHitsUpdater
-from .urls_parser import UrlsParser
-from .selectors_parser import SelectorsParser
-from .browser_handler import BrowserHandler
+from config_validator import ConfigValidator
+from nb_hits_updater import NbHitsUpdater
+from urls_parser import UrlsParser
+from selectors_parser import SelectorsParser
+from browser_handler import BrowserHandler
 
 
 class ConfigLoader:

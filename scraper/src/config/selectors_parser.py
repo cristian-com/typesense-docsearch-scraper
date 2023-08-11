@@ -1,4 +1,4 @@
-from ..helpers import css_to_xpath
+from helpers import css_to_xpath
 
 
 class SelectorsParser:

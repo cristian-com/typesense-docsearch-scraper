@@ -12,15 +12,15 @@ class TypesenseHelper:
     """TypesenseHelper"""
 
     def __init__(self, alias_name, collection_name_tmp, custom_settings):
-        self.typesense_client = typesense.Client({
-            'api_key': os.environ.get('TYPESENSE_API_KEY', None),
-            'nodes': [{
-                'host': os.environ.get('TYPESENSE_HOST', None),
-                'port': os.environ.get('TYPESENSE_PORT', None),
-                'path': os.environ.get('TYPESENSE_PATH', ''),
-                'protocol': os.environ.get('TYPESENSE_PROTOCOL', None)
-            }]
-        })
+        # self.typesense_client = typesense.Client({
+        #     'api_key': os.environ.get('TYPESENSE_API_KEY', None),
+        #     'nodes': [{
+        #         'host': os.environ.get('TYPESENSE_HOST', None),
+        #         'port': os.environ.get('TYPESENSE_PORT', None),
+        #         'path': os.environ.get('TYPESENSE_PATH', ''),
+        #         'protocol': os.environ.get('TYPESENSE_PROTOCOL', None)
+        #     }]
+        # })
         self.alias_name = alias_name
         self.collection_name_tmp = collection_name_tmp
         self.collection_locale = os.environ.get('TYPESENSE_COLLECTION_LOCALE', 'en')
